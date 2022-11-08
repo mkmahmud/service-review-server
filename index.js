@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 const port = process.env.PORT || 5000;
@@ -50,8 +50,16 @@ async function run () {
             res.send(serviceHomeData)
         })
 
+        // Get Singel Data
+        app.get('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)}
+            const serviceOne = await servicesCollection.findOne(query)
+            res.send(serviceOne)
+        })
 
-         //  Service Data add
+
+         //  Add Service Data 
         app.post('/addservices', async (req, res) => {
             const services = req.body;
             const result = await servicesCollection.insertOne(services)
