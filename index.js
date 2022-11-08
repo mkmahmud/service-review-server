@@ -67,6 +67,17 @@ async function run () {
             res.send(result) 
         })
 
+
+        // Get Review Data
+        app.get('/reviewdata', async (req, res) => {
+              const serviceId = req.query.id;
+              const query = {serviceID: serviceId}
+              const getReviews = reviewsCollections.find(query)
+              const reviews = await getReviews.toArray();
+              console.log(reviews)
+              res.send(reviews)
+        })
+
         // Add review 
 
         app.post('/addreview', async (req, res) => {
