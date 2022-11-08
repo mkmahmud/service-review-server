@@ -1,6 +1,6 @@
 [
     {
-      "_id": "6369db296f42ae255425f984",
+      
       "title": "Web Crash",
       "img": "https://static.pbslearningmedia.org/media/collections/CC_Logo_final_highres.jpg",
       "description": {
@@ -11,7 +11,7 @@
       "rating": 4.5
     },
     {
-      "_id": "6369db29c8416d88fc0c20e4",
+      
       "title": "Mobile Crash",
       "img": "https://softjourn.com/media/images/Blog/figs/Mobile_Dev_pic_03.png",
       "description": {
@@ -22,7 +22,7 @@
       "rating": 4.5
     },
     {
-      "_id": "6369db292c0addb1da2d80a1",
+      
       "title": "Cyber  Crash",
       "img": "https://cyber4dev.eu/wp-content/uploads/2021/01/Cyber4Dev-weekly-update-1-1024x576.png",
       "description": {
