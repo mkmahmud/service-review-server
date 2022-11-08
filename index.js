@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
+
 const port = process.env.PORT || 5000;
 require('dotenv').config();
 
@@ -40,7 +41,23 @@ async function run () {
             const servicesData = await coursor.toArray()
             res.send(servicesData)
         })
-        
+
+        // Get Services Home page 
+        app.get('/serviceshomepage', async (req, res) => {
+            const query = {}
+            const coursor = servicesCollection.find(query)
+            const serviceHomeData = await coursor.limit(3).toArray()
+            res.send(serviceHomeData)
+        })
+
+
+         //  Service Data add
+        app.post('/addservices', async (req, res) => {
+            const services = req.body;
+            const result = await servicesCollection.insertOne(services)
+            res.send(result) 
+        })
+
 
     }
     catch{
