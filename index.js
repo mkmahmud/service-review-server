@@ -61,7 +61,7 @@ async function run() {
         // Get services data from monogdb collection 
         app.get('/services', async (req, res) => {
             const query = {};
-            const coursor = servicesCollection.find(query);
+            const coursor = servicesCollection.find(query).sort({"date": -1});
             const servicesData = await coursor.toArray()
             res.send(servicesData)
         })
