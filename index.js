@@ -68,13 +68,23 @@ async function run () {
         })
 
 
+        // Get my Review
+
+        app.get('/myreview', async (req, res) => {
+            const userEmail = req.query.email;
+            const query = {userEmail: userEmail}
+            const getMyReviews = reviewsCollections.find(query);
+            const myreviews = await getMyReviews.toArray()
+            res.send(myreviews)
+        });
+
+
         // Get Review Data
         app.get('/reviewdata', async (req, res) => {
               const serviceId = req.query.id;
               const query = {serviceID: serviceId}
               const getReviews = reviewsCollections.find(query)
               const reviews = await getReviews.toArray();
-              console.log(reviews)
               res.send(reviews)
         })
 
