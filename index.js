@@ -30,7 +30,24 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 // JWT
+function verifyJWT (req, res, next) {
 
+    const authoraizetion = req.headers.authoraizetion;
+    if(!authoraizetion){
+        return res.status(401).send({message:'unauthorized user status()301'})
+    }
+
+    const userTocken = authoraizetion.split(' ')[1];
+    jwt.verify(userTocken, process.env.SECREET_TOCKEN, function(err, decoded){
+        if(err){
+            return res.status(402).send('unauthroize user status(402)')
+        }
+        req.decoded = decoded;
+        next()
+    })
+
+    console.log(authoraizetion)
+}
 
 
 
@@ -84,8 +101,15 @@ async function run() {
 
         // Get my Review
 
-        app.get('/myreview', async (req, res) => {
+        app.get('/myreview', verifyJWT, async (req, res) => {
             const userEmail = req.query.email;
+
+            const decodedEmail = req.decoded.email;
+            
+            if(decodedEmail !== userEmail){
+                res.status(403).send('unauthorized access status(403)')
+            }
+
             const query = { userEmail: userEmail }
             const getMyReviews = reviewsCollections.find(query);
             const myreviews = await getMyReviews.toArray()
