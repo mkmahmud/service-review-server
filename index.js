@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
@@ -26,6 +27,11 @@ app.get('/', (req, res) => {
 
 const uri = `mongodb+srv://${process.env.User_Name}:${process.env.User_Password}@cluster0.cjesyyc.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+
+// JWT
+
+
 
 
 async function run() {
@@ -65,6 +71,14 @@ async function run() {
             const services = req.body;
             const result = await servicesCollection.insertOne(services)
             res.send(result)
+        })
+
+
+        // JWT
+        app.post('/jwt',  (req, res) => {
+            const user = req.body;
+            const tocken = jwt.sign(user,process.env.SECREET_TOCKEN, {expiresIn:'1h'} )
+            res.send({tocken})
         })
 
 
