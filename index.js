@@ -28,12 +28,12 @@ const uri = `mongodb+srv://${process.env.User_Name}:${process.env.User_Password}
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
-async function run () {
+async function run() {
 
     const servicesCollection = client.db('mk').collection('services');
     const reviewsCollections = client.db('mk').collection('reviews')
 
-    try{
+    try {
 
         // Get services data from monogdb collection 
         app.get('/services', async (req, res) => {
@@ -54,17 +54,17 @@ async function run () {
         // Get Singel Data
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)}
+            const query = { _id: ObjectId(id) }
             const serviceOne = await servicesCollection.findOne(query)
             res.send(serviceOne)
         })
 
 
-         //  Add Service Data 
+        //  Add Service Data 
         app.post('/addservices', async (req, res) => {
             const services = req.body;
             const result = await servicesCollection.insertOne(services)
-            res.send(result) 
+            res.send(result)
         })
 
 
@@ -72,20 +72,43 @@ async function run () {
 
         app.get('/myreview', async (req, res) => {
             const userEmail = req.query.email;
-            const query = {userEmail: userEmail}
+            const query = { userEmail: userEmail }
             const getMyReviews = reviewsCollections.find(query);
             const myreviews = await getMyReviews.toArray()
             res.send(myreviews)
         });
 
+        // Update My review Data
+        app.patch('/myreview/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateReview = req.body.updateReview;
+            const query = {_id: ObjectId(id)}
+            const updateDoc = {
+                $set:{
+                    message: updateReview
+                }
+            }
+            const result = await reviewsCollections.updateOne(query, updateDoc)
+            res.send(result)
+        });
+
+
+        // Delete My review Data
+
+        app.delete('/myreview/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)}
+            const result = await reviewsCollections.deleteOne(query)
+            res.send(result)
+        });
 
         // Get Review Data
         app.get('/reviewdata', async (req, res) => {
-              const serviceId = req.query.id;
-              const query = {serviceID: serviceId}
-              const getReviews = reviewsCollections.find(query)
-              const reviews = await getReviews.toArray();
-              res.send(reviews)
+            const serviceId = req.query.id;
+            const query = { serviceID: serviceId }
+            const getReviews = reviewsCollections.find(query)
+            const reviews = await getReviews.toArray();
+            res.send(reviews)
         })
 
         // Add review 
@@ -93,12 +116,12 @@ async function run () {
         app.post('/addreview', async (req, res) => {
             const reviewData = req.body;
             const result = await reviewsCollections.insertOne(reviewData)
-            res.send(result) 
+            res.send(result)
         })
 
 
     }
-    catch{
+    catch {
 
     }
 }
